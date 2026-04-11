@@ -1,0 +1,29 @@
+<div class="flex items-center justify-between mb-6">
+  <div>
+    <h1 class="text-2xl font-bold tracking-tight"><%= @campaign.name %></h1>
+    <p class="text-sm text-slate-400">
+      <%= @campaign.target_group %> · <%= @campaign.prompt_type %> ·
+      <span class="text-xs px-2 py-0.5 rounded-full ml-1
+        <%= @campaign.status == 'sent' ? 'bg-emerald-500/15 text-emerald-300' : 'bg-slate-700 text-slate-300' %>">
+        <%= @campaign.status %>
+      </span>
+    </p>
+  </div>
+  <div class="flex gap-2">
+    <%= link_to "Düzenle", edit_admin_campaign_path(@campaign), class: "text-sm px-4 py-2 rounded-md border border-slate-700" %>
+    <%= button_to "Kampanyayı Gönder", send_now_admin_campaign_path(@campaign),
+          method: :post, class: "text-sm px-4 py-2 rounded-md bg-indigo-600 hover:bg-indigo-500 text-white" %>
+  </div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+  <%= render "admin/dashboard/kpi", title: "Sent",     value: @campaign.emails_sent %>
+  <%= render "admin/dashboard/kpi", title: "Opened",   value: @campaign.emails_opened %>
+  <%= render "admin/dashboard/kpi", title: "Clicked",  value: @campaign.links_clicked %>
+  <%= render "admin/dashboard/kpi", title: "Captured", value: @campaign.creds_captured, alert: true %>
+</div>
+
+<div class="rounded-xl bg-slate-900 border border-slate-800 p-6">
+  <h2 class="text-sm font-semibold mb-3">Senaryo</h2>
+  <p class="text-sm text-slate-300 whitespace-pre-wrap"><%= @campaign.scenario_prompt %></p>
+</div>

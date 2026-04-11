@@ -1,0 +1,35 @@
+<div class="flex items-center justify-between mb-6">
+  <h1 class="text-2xl font-bold tracking-tight">ANALYTICS</h1>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+  <%= render "admin/dashboard/kpi", title: "Total Sent",     value: number_with_delimiter(@total_sent) %>
+  <%= render "admin/dashboard/kpi", title: "Total Opened",   value: number_with_delimiter(@total_opened) %>
+  <%= render "admin/dashboard/kpi", title: "Total Clicked",  value: number_with_delimiter(@total_clicked) %>
+  <%= render "admin/dashboard/kpi", title: "Captured",       value: number_with_delimiter(@total_creds), alert: true %>
+</div>
+
+<div class="rounded-xl bg-slate-900 border border-slate-800 p-6">
+  <h2 class="text-sm font-semibold mb-4">Kampanya bazında funnel</h2>
+  <div class="space-y-4">
+    <% @series.each do |s| %>
+      <div>
+        <div class="flex justify-between text-xs text-slate-400 mb-1">
+          <span><%= s[:label] %></span>
+          <span><%= s[:sent] %> → <%= s[:opened] %> → <%= s[:clicked] %> → <%= s[:captured] %></span>
+        </div>
+        <div class="h-3 rounded bg-slate-800 overflow-hidden flex">
+          <% total = [s[:sent], 1].max %>
+          <div class="h-full bg-slate-600" style="width: <%= (s[:opened].to_f / total * 100).round %>%"></div>
+          <div class="h-full bg-indigo-500" style="width: <%= (s[:clicked].to_f / total * 100).round %>%"></div>
+          <div class="h-full bg-rose-500"   style="width: <%= (s[:captured].to_f / total * 100).round %>%"></div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="mt-6 flex gap-4 text-xs text-slate-400">
+    <span class="flex items-center gap-2"><span class="w-3 h-3 rounded bg-slate-600"></span>Opened</span>
+    <span class="flex items-center gap-2"><span class="w-3 h-3 rounded bg-indigo-500"></span>Clicked</span>
+    <span class="flex items-center gap-2"><span class="w-3 h-3 rounded bg-rose-500"></span>Captured</span>
+  </div>
+</div>

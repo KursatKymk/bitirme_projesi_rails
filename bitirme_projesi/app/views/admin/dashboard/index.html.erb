@@ -1,0 +1,71 @@
+<div class="flex items-center justify-between mb-6">
+  <h1 class="text-2xl font-bold tracking-tight">ADMIN DASHBOARD</h1>
+  <span class="text-xs text-slate-500"><%= Date.current.strftime("%d %B %Y").upcase %></span>
+</div>
+
+<!-- KPI cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+  <%= render "kpi", title: "Total Emails Sent", value: number_with_delimiter(@total_emails_sent), change: "+12%", positive: true %>
+  <%= render "kpi", title: "Click-Through Rate", value: "#{@ctr}%", change: "-3.1%", positive: false %>
+
+  <div class="rounded-xl bg-slate-900 border border-slate-800 p-5">
+    <p class="text-xs uppercase tracking-wider text-slate-500">Campaign Engagement</p>
+    <div class="mt-4 space-y-3">
+      <% @engagement.each do |row| %>
+        <div>
+          <div class="flex justify-between text-xs text-slate-400 mb-1">
+            <span><%= row[:name] %></span>
+            <span><%= row[:clicked] %> clicks</span>
+          </div>
+          <div class="h-2 rounded bg-slate-800 overflow-hidden">
+            <% pct = row[:opened].zero? ? 0 : (row[:clicked].to_f / row[:opened] * 100).clamp(0, 100) %>
+            <div class="h-full bg-indigo-500" style="width: <%= pct.round %>%"></div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+  <%= render "kpi", title: "Data Breach Rate",             value: "#{@breach_rate}%", alert: true %>
+  <%= render "kpi", title: "Credential Submission Rate",   value: "#{@credential_submission_rate}%", highlighted: true %>
+</div>
+
+<!-- Campaign table -->
+<div class="rounded-xl bg-slate-900 border border-slate-800 overflow-hidden">
+  <div class="px-5 py-4 border-b border-slate-800 flex items-center justify-between">
+    <h2 class="text-sm font-semibold">Son Kampanyalar</h2>
+    <%= link_to "Yeni Kampanya", new_admin_campaign_path,
+          class: "text-xs bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-md" %>
+  </div>
+  <table class="w-full text-sm">
+    <thead class="bg-slate-900 text-slate-400 text-xs uppercase">
+      <tr>
+        <th class="px-5 py-3 text-left">Name</th>
+        <th class="px-5 py-3 text-left">Target</th>
+        <th class="px-5 py-3 text-left">Status</th>
+        <th class="px-5 py-3 text-right">Sent</th>
+        <th class="px-5 py-3 text-right">CTR</th>
+        <th class="px-5 py-3 text-right">Captured</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @campaigns.each do |c| %>
+        <tr class="border-t border-slate-800 hover:bg-slate-800/50">
+          <td class="px-5 py-3"><%= link_to c.name, admin_campaign_path(c), class: "text-indigo-400 hover:underline" %></td>
+          <td class="px-5 py-3 text-slate-400"><%= c.target_group %></td>
+          <td class="px-5 py-3">
+            <span class="text-xs px-2 py-0.5 rounded-full
+              <%= c.status == 'sent' ? 'bg-emerald-500/15 text-emerald-300' : 'bg-slate-700 text-slate-300' %>">
+              <%= c.status %>
+            </span>
+          </td>
+          <td class="px-5 py-3 text-right"><%= c.emails_sent %></td>
+          <td class="px-5 py-3 text-right"><%= c.click_through_rate %>%</td>
+          <td class="px-5 py-3 text-right text-rose-400"><%= c.creds_captured %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

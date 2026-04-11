@@ -1,0 +1,7 @@
+tr:
+  hello: "Merhaba"
+  admin:
+    dashboard: "Yönetim Paneli"
+    campaigns: "Kampanyalar"
+    analytics: "Analitik"
+    credentials: "Yakalanan Bilgiler"

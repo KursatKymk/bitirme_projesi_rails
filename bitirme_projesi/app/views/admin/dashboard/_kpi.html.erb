@@ -1,0 +1,27 @@
+<%
+  alert        = local_assigns.fetch(:alert, false)
+  highlighted  = local_assigns.fetch(:highlighted, false)
+  change       = local_assigns.fetch(:change, nil)
+  positive     = local_assigns.fetch(:positive, true)
+
+  border_cls = if alert
+                 "border-rose-500/40"
+               elsif highlighted
+                 "border-indigo-500/40"
+               else
+                 "border-slate-800"
+               end
+%>
+<div class="rounded-xl bg-slate-900 border <%= border_cls %> p-5">
+  <p class="text-xs uppercase tracking-wider text-slate-500"><%= title %></p>
+  <div class="mt-3 flex items-baseline gap-3">
+    <span class="text-3xl font-semibold <%= 'text-rose-400' if alert %> <%= 'text-indigo-300' if highlighted %>">
+      <%= value %>
+    </span>
+    <% if change %>
+      <span class="text-xs <%= positive ? 'text-emerald-400' : 'text-rose-400' %>">
+        <%= change %>
+      </span>
+    <% end %>
+  </div>
+</div>

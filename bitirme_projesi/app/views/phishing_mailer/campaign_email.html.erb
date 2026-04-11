@@ -1,0 +1,16 @@
+<div style="font-family: Arial, sans-serif; color: #1b1b1b; max-width: 560px;">
+  <h3>Microsoft Hesabınızla İlgili Önemli Bildirim</h3>
+  <p>Merhaba <%= @target.full_name.presence || "Öğrenci" %>,</p>
+  <p>Hesabınızda şüpheli bir giriş denemesi fark edildi.</p>
+  <p>Lütfen güvenliğiniz için aşağıdaki bağlantıya tıklayarak giriş yapın ve bilgilerinizi doğrulayın:</p>
+  <p>
+    <a href="<%= @link %>"
+       style="background:#0067b8;color:#fff;padding:10px 18px;text-decoration:none;border-radius:3px;">
+      Giriş Yap ve Doğrula
+    </a>
+  </p>
+  <p style="color:#666;font-size:12px;margin-top:24px;">
+    Saygılarımızla,<br>
+    Kadir Has Üniversitesi Bilgi İşlem / Microsoft Güvenlik Ekibi
+  </p>
+</div>
