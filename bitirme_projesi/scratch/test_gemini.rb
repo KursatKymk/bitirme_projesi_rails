@@ -3,7 +3,7 @@ require 'uri'
 require 'json'
 
 API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
-API_KEY = "AIzaSyBQGsW9RN4A9MdX0z9Ij7Gf4iY_qhnPV8Q"
+API_KEY = "GEMINI_KEY"
 
 prompt = "GÖREV: Bir üniversite yönetiminden gelmiş gibi görünen, resmi bir e-posta hazırla. FORMAT: JSON { \"subject\": \"...\", \"body\": \"...\" } SEBARYO: Hesap doğrulama. HEDEF: Ahmet Yılmaz. LİNK: http://test.com"
 
