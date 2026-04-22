@@ -1,0 +1,1 @@
+{"rol"=>"Araştırma Görevlisi", "departman"=>"İktisadi, İdari ve Sosyal Bilimler Fakültesi/Yönetim Bilişim Sistemleri", "arastirma_alanlari"=>"Yapay Zeka", "yayinlar"=>"\"The Open Source Intelligence (OSINT) in the Electricity Sector: Balancing Utility and Responsibility\",", "projeler"=>nil}

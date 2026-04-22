@@ -1,22 +1,39 @@
 require 'net/http'
 require 'uri'
 require 'json'
+require 'dotenv'
 
-API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
-API_KEY = "AIzaSyBQGsW9RN4A9MdX0z9Ij7Gf4iY_qhnPV8Q"
+# .env dosyasını manuel yükleyelim
+Dotenv.load('.env')
 
-prompt = "GÖREV: Bir üniversite yönetiminden gelmiş gibi görünen, resmi bir e-posta hazırla. FORMAT: JSON { \"subject\": \"...\", \"body\": \"...\" } SEBARYO: Hesap doğrulama. HEDEF: Ahmet Yılmaz. LİNK: http://test.com"
+api_key = ENV['GEMINI_API_KEY']
+# Model ismini tam olarak kontrol edelim
+model = "gemini-3-flash-preview" 
+api_url = "https://generativelanguage.googleapis.com/v1beta/models/#{model}:generateContent?key=#{api_key}"
 
-uri = URI("#{API_URL}?key=#{API_KEY}")
+puts "--- Gemini API Bağlantı Testi ---"
+puts "Kullanılan Model: #{model}"
+puts "API Anahtarı Mevcut mu?: #{api_key ? 'Evet (' + api_key[0..5] + '...)' : 'Hayır'}"
+
+uri = URI(api_url)
 http = Net::HTTP.new(uri.host, uri.port)
 http.use_ssl = true
 
 request = Net::HTTP::Post.new(uri)
 request["Content-Type"] = "application/json"
-request.body = {
-  contents: [{ parts: [{ text: prompt }] }]
-}.to_json
+request.body = { contents: [{ parts: [{ text: "Merhaba, bağlantı testi." }] }] }.to_json
 
-response = http.request(request)
-puts "STATUS: #{response.code}"
-puts "BODY: #{response.body}"
+begin
+  response = http.request(request)
+  puts "HTTP Durum Kodu: #{response.code}"
+  
+  if response.code == "200"
+    puts "BAŞARILI: API yanıt verdi!"
+    puts JSON.parse(response.body).dig("candidates", 0, "content", "parts", 0, "text")
+  else
+    puts "HATA: API hata döndürdü."
+    puts "Yanıt Gövdesi: #{response.body}"
+  end
+rescue => e
+  puts "SİSTEM HATASI: #{e.message}"
+end

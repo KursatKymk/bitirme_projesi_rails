@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_11_000005) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_21_141340) do
   create_table "campaign_targets", force: :cascade do |t|
     t.integer "campaign_id", null: false
     t.integer "target_id", null: false
@@ -19,6 +19,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_11_000005) do
     t.json "custom_data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "spam_score"
+    t.text "spam_analysis"
     t.index ["campaign_id", "target_id"], name: "index_campaign_targets_on_campaign_id_and_target_id", unique: true
     t.index ["campaign_id"], name: "index_campaign_targets_on_campaign_id"
     t.index ["target_id"], name: "index_campaign_targets_on_target_id"
@@ -40,6 +42,11 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_11_000005) do
     t.datetime "sent_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "email_language", default: "English"
+    t.boolean "use_custom_scenario", default: false
+    t.string "ai_status"
+    t.integer "ai_processed_count"
+    t.integer "ai_total_count"
     t.index ["status"], name: "index_campaigns_on_status"
   end
 

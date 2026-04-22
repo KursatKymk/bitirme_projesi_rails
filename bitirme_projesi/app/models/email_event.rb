@@ -2,7 +2,7 @@ class EmailEvent < ApplicationRecord
   belongs_to :campaign
   belongs_to :target
 
-  TYPES = %w[sent opened clicked submitted].freeze
+  TYPES = %w[sent opened clicked submitted blocked_by_spam_filter].freeze
   validates :event_type, inclusion: { in: TYPES }
 
   before_validation { self.occurred_at ||= Time.current }

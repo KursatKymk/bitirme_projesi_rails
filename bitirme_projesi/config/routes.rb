@@ -14,6 +14,8 @@ Rails.application.routes.draw do
         post :send_now
         post :import_excel
         post :generate_ai_content
+        post :add_target
+        get :ai_status
       end
     end
 

@@ -42,4 +42,8 @@ class Campaign < ApplicationRecord
     return 0.0 if emails_sent.zero?
     (emails_opened.to_f / emails_sent * 100).round(1)
   end
+
+  def target_headers
+    ['email', 'full name', 'role', 'department']
+  end
 end

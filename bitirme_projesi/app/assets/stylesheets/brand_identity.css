@@ -1,0 +1,239 @@
+/* 
+  PHISHSIM BRAND IDENTITY DOCUMENT - REVISED PALETTE
+  Central source of truth based on the new 'Professional Tech Blue' palette.
+*/
+
+:root {
+  /* ATTITUDE 5-COLOR PALETTE */
+  --brand-midnight: #00033D;
+  /* Deepest Navy Background */
+  --brand-navy: #0600AB;
+  /* Royal Purple/Blue Cards */
+  --brand-azure: #0033FF;
+  /* Vibrant Electric Blue */
+  --brand-sky: #977DFF;
+  /* Soft Purple Accents */
+  --brand-ice: #e3e5ff;
+  /* Lavender-White Highlights */
+  --brand-alert: #ff0055;
+  --brand-alert-soft: #ff00559d;
+}
+
+/* Atomic Utility Classes (Fallbacks) */
+.brand-bg-midnight {
+  background-color: var(--brand-midnight) !important;
+}
+
+.brand-bg-navy {
+  background-color: var(--brand-navy) !important;
+}
+
+.brand-bg-azure {
+  background-color: var(--brand-azure) !important;
+}
+
+.brand-bg-sky {
+  background-color: var(--brand-sky) !important;
+}
+
+.brand-bg-ice {
+  background-color: var(--brand-ice) !important;
+}
+
+.brand-text-midnight {
+  color: var(--brand-midnight) !important;
+}
+
+.brand-text-navy {
+  color: var(--brand-navy) !important;
+}
+
+.brand-text-azure {
+  color: var(--brand-azure) !important;
+}
+
+.brand-text-sky {
+  color: var(--brand-sky) !important;
+}
+
+.brand-text-ice {
+  color: var(--brand-ice) !important;
+}
+
+/* Global Base Fixes */
+body {
+  background: var(--brand-ice) !important;
+  color: var(--brand-midnight) !important;
+  font-family: inherit;
+}
+
+/* Sidebar High-Contrast Fix */
+aside {
+  background-color: var(--brand-midnight) !important;
+  color: var(--brand-ice) !important;
+}
+
+/* Attitude Gradient Utilities - REFINED FOR LIGHT MODE */
+.brand-grad-1 {
+  background: linear-gradient(135deg, #FFFFFF 0%, #F2E6EE 100%) !important;
+}
+
+.brand-grad-2 {
+  background: linear-gradient(135deg, #F2E6EE 0%, #977DFF 100%) !important;
+}
+
+.brand-grad-3 {
+  background: linear-gradient(135deg, #977DFF 0%, #0033FF 100%) !important;
+}
+
+.brand-grad-4 {
+  background: linear-gradient(135deg, #0033FF 0%, #00033D 100%) !important;
+}
+
+.brand-bg-vibrant {
+  background: linear-gradient(135deg, var(--brand-azure) 0%, var(--brand-midnight) 100%) !important;
+}
+
+/* HIGH-CONTRAST BUTTON SYSTEM - STANDARDIZED TO MIDNIGHT DEFAULT */
+.btn-command,
+.btn-secondary {
+  background-color: var(--brand-midnight) !important;
+  color: #FFFFFF !important;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  border: 1px solid rgba(0, 51, 255, 0.4);
+  box-shadow: 0 10px 30px -10px rgba(0, 3, 61, 0.5);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 2rem;
+  border-radius: 1rem;
+  text-decoration: none;
+}
+
+.btn-command:hover,
+.btn-secondary:hover {
+  background-color: var(--brand-azure) !important;
+  box-shadow: 0 15px 35px -5px rgba(0, 51, 255, 0.4);
+  transform: translateY(-2px);
+  color: #FFFFFF !important;
+}
+
+.btn-danger {
+  background-color: var(--brand-alert) !important;
+  color: #FFFFFF !important;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  box-shadow: 0 8px 20px -8px rgba(255, 0, 85, 0.3);
+  transition: all 0.3s ease;
+  border-radius: 0.75rem;
+  padding: 0.5rem 1.5rem;
+  text-decoration: none;
+}
+
+.btn-danger:hover {
+  background-color: var(--brand-azure) !important;
+  box-shadow: 0 12px 25px -5px rgba(0, 51, 255, 0.4);
+  color: #FFFFFF !important;
+  transform: translateY(-2px) scale(1.02);
+  filter: brightness(1.1);
+}
+
+/* GLOBAL HYDRAULIC INTERACTION LAYER */
+button,
+.btn-command,
+.btn-secondary,
+.btn-danger,
+[type="button"],
+[type="submit"] {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+button:hover,
+.btn-command:hover,
+.btn-secondary:hover,
+.btn-danger:hover,
+[type="button"]:hover,
+[type="submit"]:hover {
+  background-color: var(--brand-azure) !important;
+  color: #FFFFFF !important;
+  transform: translateY(-2px) scale(1.02) !important;
+  filter: brightness(1.1) !important;
+  cursor: pointer;
+  box-shadow: 0 15px 35px -5px rgba(0, 51, 255, 0.4) !important;
+}
+
+button:active,
+.btn-command:active,
+.btn-secondary:active,
+.btn-danger:active,
+[type="button"]:active,
+[type="submit"]:active {
+  transform: translateY(0) scale(0.98) !important;
+  filter: brightness(0.9) !important;
+}
+
+.brand-header-primary {
+  font-size: 1.5rem !important;
+  /* 2xl */
+  font-weight: 900 !important;
+  letter-spacing: -0.05em !important;
+  /* tracking-tighter */
+  color: var(--brand-midnight) !important;
+  text-transform: uppercase !important;
+  font-style: italic !important;
+}
+
+.brand-card-solid {
+  background-color: #FFFFFF !important;
+  border-radius: 2rem !important;
+  border-width: 1px !important;
+  border-color: rgba(0, 51, 255, 0.1) !important;
+  /* brand-azure/10 */
+  box-shadow: 0 25px 50px -12px rgba(0, 3, 61, 0.05) !important;
+  /* shadow-brand-midnight/5 */
+}
+
+/* HIGH-CONTRAST TOGGLE SYSTEM (PERSISTENT COLORS) */
+.btn-toggle-command {
+  background-color: var(--brand-midnight) !important;
+  color: #FFFFFF !important;
+  border: 1px solid rgba(0, 51, 255, 0.1) !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0.5;
+}
+
+input:checked+.btn-toggle-command {
+  opacity: 1 !important;
+  border-color: var(--brand-azure) !important;
+  transform: scale(1.02);
+  box-shadow: 0 5px 15px rgba(0, 3, 61, 0.3) !important;
+}
+
+.btn-toggle-danger {
+  background-color: #ff0055 !important;
+  color: #FFFFFF !important;
+  border: 1px solid rgba(0, 51, 255, 0.1) !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0.5;
+}
+
+input:checked+.btn-toggle-danger {
+  opacity: 1 !important;
+  border-color: #FFFFFF !important;
+  transform: scale(1.02);
+  box-shadow: 0 5px 15px rgba(255, 0, 85, 0.3) !important;
+}
+
+input:checked+.btn-toggle-command,
+input:checked+.btn-toggle-danger {
+  z-index: 10;
+}
+
+input:checked+.btn-toggle-command div,
+input:checked+.btn-toggle-danger div {
+  color: #FFFFFF !important;
+}

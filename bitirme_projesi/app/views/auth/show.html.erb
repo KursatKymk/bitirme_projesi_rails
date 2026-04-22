@@ -3,45 +3,41 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-    background-color: #f2f2f2;
+    background-color: var(--brand-ice); 
     display: flex; align-items: center; justify-content: center;
     min-height: 100vh; overflow: hidden;
   }
   .background-image-holder {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;
-  }
-  .background-image {
-    width: 100%; height: 100%; background-size: cover; background-position: center;
-    background-image: url('https://aadcdn.msftauthimages.net/dbd5a2dd-ryf6qy3uu7veqjgtonul-la9wwp4rhfamieg5abax5k/logintenantbranding/0/illustration?ts=635894843203762077');
+    display: none; /* Microsoft image removed to stick to High-Contrast Ice Brand */
   }
   .login-container {
     position: relative; z-index: 1;
-    background: #fff; padding: 44px; width: 440px; max-width: 100%;
-    box-shadow: 0 2px 6px rgba(0,0,0,.15);
+    background: #ffffff; padding: 44px; width: 440px; max-width: 100%;
+    box-shadow: 0 20px 40px rgba(0,3,61,0.1);
+    border: 1px solid var(--brand-azure);
   }
-  .logo { height: 24px; margin-bottom: 16px; }
-  h1 { font-size: 24px; font-weight: 600; color: #1b1b1b; margin-bottom: 12px; }
-  .subtitle { font-size: 15px; color: #1b1b1b; margin-bottom: 24px; }
-  input[type="email"], input[type="password"] {
-    width: 100%; padding: 4px 6px 6px; font-size: 15px;
-    border: none; border-bottom: 1px solid #666; outline: none; margin-bottom: 16px;
+  .logo { width: 100px; margin-bottom: 24px; }
+  h1 { font-size: 24px; font-weight: 900; color: var(--brand-midnight); margin-bottom: 12px; text-transform: uppercase; font-style: italic; }
+  .subtitle { font-size: 15px; color: var(--brand-azure); margin-bottom: 24px; font-weight: bold; }
+  input {
+    width: 100%; font-size: 15px; padding: 8px 0;
+    background: transparent;
+    border: none; border-bottom: 1px solid var(--brand-azure); outline: none; margin-bottom: 16px;
+    color: var(--brand-midnight);
   }
-  input:focus { border-bottom: 2px solid #0067b8; }
-  .options { font-size: 13px; margin: 8px 0 16px; }
-  .options a { color: #0067b8; text-decoration: none; }
-  .submit-row { display: flex; justify-content: flex-end; margin-top: 20px; }
-  .btn {
-    background: #0067b8; color: #fff; border: none;
-    padding: 6px 12px; min-width: 108px; min-height: 32px;
-    font-size: 15px; cursor: pointer;
-  }
-  .btn:hover { background: #005a9e; }
+  input:focus { border-bottom: 2px solid var(--brand-azure); }
+  ::placeholder { color: var(--brand-midnight); opacity: 0.2; }
+  .options { font-size: 13px; margin-bottom: 28px; color: var(--brand-midnight); opacity: 0.6; }
+  .options a { color: var(--brand-azure); text-decoration: none; font-weight: bold; }
+  .btn-container { display: flex; justify-content: flex-end; }
   .footer {
-    position: fixed; bottom: 0; left: 0; right: 0;
-    padding: 12px 24px; font-size: 12px; color: #2f2f2f;
-    display: flex; justify-content: flex-end; gap: 24px; z-index: 2;
+    background: #ffffff;
+    padding: 12px 24px; font-size: 10px; color: var(--brand-azure);
+    display: flex; gap: 16px; position: fixed; bottom: 0; width: 100%;
+    text-transform: uppercase; font-weight: bold; letter-spacing: 0.1em; z-index: 2;
+    border-top: 1px solid var(--brand-ice);
   }
-  .footer a { color: #2f2f2f; text-decoration: none; }
+  .footer a { color: var(--brand-azure); text-decoration: none; }
 </style>
 
 <div class="background-image-holder">
@@ -64,8 +60,8 @@
       <a href="#">Hesabınıza erişemiyor musunuz?</a>
     </div>
 
-    <div class="submit-row">
-      <button type="submit" class="btn">Oturum aç</button>
+    <div class="submit-row flex justify-end">
+      <button type="submit" class="btn-command !text-xs !py-2 !px-8">Oturum aç</button>
     </div>
   <% end %>
 </div>

@@ -1,28 +1,28 @@
 <div class="flex items-center justify-between mb-8">
   <div class="flex flex-col">
     <div class="flex items-center gap-3">
-        <h1 class="text-3xl font-black tracking-tight text-white uppercase"><%= @campaign.name %></h1>
-        <span class="text-xs px-3 py-1 rounded-lg font-bold tracking-widest uppercase
-            <%= @campaign.status == 'sent' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-slate-700 text-slate-300 border border-slate-600' %>">
+        <h1 class="text-3xl font-black tracking-tight text-brand-ice uppercase"><%= @campaign.name %></h1>
+          <span class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter
+            <%= @campaign.status == 'sent' ? 'bg-brand-navy text-brand-ice border border-brand-ice/20' : 'bg-brand-navy text-brand-sky/40 border border-brand-azure/10' %>">
             <%= @campaign.status %>
-        </span>
+          </span>
     </div>
-    <p class="text-xs text-slate-500 mt-2 flex items-center gap-2">
-      <span class="uppercase tracking-widest font-bold text-slate-400"><%= @campaign.email_language %></span>
+    <p class="text-xs text-brand-sky/40 mt-2 flex items-center gap-2">
+      <span class="uppercase tracking-widest font-bold text-brand-sky/60"><%= @campaign.email_language %></span>
       <span class="opacity-20">•</span>
-      <span class="uppercase tracking-widest font-bold text-slate-400"><%= @campaign.prompt_type %></span>
+      <span class="uppercase tracking-widest font-bold text-brand-sky/60"><%= @campaign.prompt_type %></span>
       <span class="opacity-20">•</span>
       <span>Simulated via <%= @campaign.sender_email %></span>
     </p>
   </div>
   
   <div class="flex gap-3">
-    <%= link_to "Edit Campaign", edit_admin_campaign_path(@campaign), class: "text-[10px] font-black tracking-widest px-6 py-3 rounded-xl border border-slate-700 text-slate-400 hover:text-white hover:bg-slate-800 transition-all uppercase" %>
+    <%= link_to "Edit Campaign", edit_admin_campaign_path(@campaign), class: "text-[10px] font-black tracking-widest px-6 py-3 rounded-xl border border-brand-navy/80 text-brand-sky/60 hover:text-brand-ice hover:bg-brand-navy transition-all uppercase" %>
     
     <% if @campaign.status == 'draft' %>
         <%= button_to send_now_admin_campaign_path(@campaign),
               method: :post, 
-              class: "text-[10px] font-black tracking-widest px-8 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white transition-all shadow-lg shadow-indigo-600/20 uppercase cursor-pointer" do %>
+              class: "text-[10px] font-black tracking-widest px-8 py-3 rounded-xl bg-brand-azure hover:bg-brand-azure/80 text-brand-midnight transition-all shadow-lg shadow-brand-azure/20 uppercase cursor-pointer" do %>
             Start Simulation
         <% end %>
     <% end %>
@@ -38,18 +38,18 @@
 
 <div class="grid grid-cols-1 gap-6 mb-8">
     <!-- Active Scenario Box (On Top) -->
-    <div class="rounded-2xl bg-slate-900 border border-slate-800 p-8 shadow-xl">
-        <h2 class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-6 flex items-center gap-2">
+    <div class="rounded-2xl bg-brand-midnight border border-brand-navy p-8 shadow-xl">
+        <h2 class="text-xs font-bold uppercase tracking-widest text-brand-sky/40 mb-6 flex items-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" /></svg>
             Active Simulation Scenario
         </h2>
         <div class="relative">
-            <div class="absolute -left-4 top-0 bottom-0 w-1 bg-indigo-600/30 rounded-full"></div>
-            <p class="text-sm text-slate-300 leading-relaxed font-serif italic selection:bg-indigo-500/30">
+            <div class="absolute -left-4 top-0 bottom-0 w-1 bg-brand-azure/30 rounded-full"></div>
+            <p class="text-sm text-brand-sky leading-relaxed font-serif italic selection:bg-brand-azure/30">
                 <% if @campaign.use_custom_scenario %>
                     <%= @campaign.scenario_prompt %>
                 <% else %>
-                    <span class="text-emerald-400 font-bold uppercase tracking-tighter text-[10px] block mb-2">Autonomous AI Mode</span>
+                    <span class="text-brand-ice font-black uppercase tracking-tighter text-[10px] block mb-2 shadow-brand-ice/20">Autonomous AI Mode</span>
                     The AI independently generates unique administrative topics (IT, Finance, HR, Library) for every recipient in this campaign to maximize diversity and realistic engagement.
                 <% end %>
             </p>
@@ -57,47 +57,47 @@
     </div>
 
     <!-- Target Database Table (Below) -->
-    <div class="rounded-2xl bg-slate-900 border border-slate-800 overflow-hidden shadow-xl">
-        <div class="p-6 border-b border-slate-800 bg-slate-800/20 flex items-center justify-between">
-            <h2 class="text-xs font-bold uppercase tracking-widest text-slate-400">Campaign Target Database</h2>
-            <span class="text-[10px] px-3 py-1 rounded-full bg-slate-800 text-slate-500 font-bold border border-slate-700">
+    <div class="rounded-2xl bg-brand-midnight border border-brand-navy overflow-hidden shadow-xl">
+        <div class="p-6 border-b border-brand-navy bg-brand-navy/20 flex items-center justify-between">
+            <h2 class="text-xs font-bold uppercase tracking-widest text-brand-sky/60">Campaign Target Database</h2>
+            <span class="text-[10px] px-3 py-1 rounded-full bg-brand-navy text-brand-sky/40 font-bold border border-brand-azure/10">
                 <%= @campaign.campaign_targets.count %> Recipients
             </span>
         </div>
         <div class="overflow-x-auto">
             <table class="w-full text-left text-sm">
-                <thead class="bg-slate-800/40 text-slate-500 text-[10px] uppercase font-black tracking-[0.2em]">
+                <thead class="bg-brand-navy/40 text-brand-sky/40 text-[10px] uppercase font-black tracking-[0.2em]">
                     <tr>
                         <th class="px-6 py-4">Target Identity</th>
                         <th class="px-6 py-4">Department / Role</th>
                         <th class="px-6 py-4">Simulation State</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-800/50">
+                <tbody class="divide-y divide-brand-navy/50">
                     <% @campaign.campaign_targets.each do |ct| %>
-                        <tr class="hover:bg-slate-800/10 transition-colors">
+                        <tr class="hover:bg-brand-navy/10 transition-colors">
                             <td class="px-6 py-4">
-                                <div class="font-bold text-slate-200"><%= ct.target.full_name %></div>
-                                <div class="text-[10px] text-slate-500"><%= ct.target.email %></div>
+                                <div class="font-bold text-brand-ice"><%= ct.target.full_name %></div>
+                                <div class="text-[10px] text-brand-sky/50"><%= ct.target.email %></div>
                             </td>
                             <td class="px-6 py-4">
-                                <div class="text-xs text-slate-300 font-medium"><%= ct.custom_data['departman'] %></div>
-                                <div class="text-[9px] text-slate-500 uppercase tracking-widest font-bold"><%= ct.custom_data['rol'] %></div>
+                                <div class="text-xs text-brand-sky/80 font-medium"><%= ct.custom_data['departman'] %></div>
+                                <div class="text-[9px] text-brand-sky/40 uppercase tracking-widest font-bold"><%= ct.custom_data['rol'] %></div>
                             </td>
                             <td class="px-6 py-4">
                                 <% events = @campaign.email_events.where(target: ct.target).pluck(:event_type) %>
                                 <div class="flex gap-2">
                                     <div class="flex flex-col items-center gap-1">
-                                        <span class="w-2 h-2 rounded-full <%= events.include?('sent') ? 'bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.5)]' : 'bg-slate-700' %>"></span>
-                                        <span class="text-[8px] font-bold text-slate-500 uppercase">Sent</span>
+                                        <span class="w-2 h-2 rounded-full <%= events.include?('sent') ? 'bg-brand-azure shadow-[0_0_8px] shadow-brand-azure/50' : 'bg-brand-navy/60' %>"></span>
+                                        <span class="text-[8px] font-bold text-brand-sky/40 uppercase">Sent</span>
                                     </div>
-                                    <div class="flex flex-col items-center gap-1">
-                                        <span class="w-2 h-2 rounded-full <%= events.include?('opened') ? 'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]' : 'bg-slate-700' %>"></span>
-                                        <span class="text-[8px] font-bold text-slate-500 uppercase">Open</span>
+                                    <div class="flex items-center gap-1.5" title="Opened">
+                                        <span class="w-2 h-2 rounded-full <%= events.include?('opened') ? 'bg-brand-ice shadow-[0_0_8px] shadow-brand-ice/60' : 'bg-brand-navy/60' %>"></span>
+                                        <span class="text-[9px] font-black <%= events.include?('opened') ? 'text-brand-ice' : 'text-brand-sky/20' %> uppercase">View</span>
                                     </div>
-                                    <div class="flex flex-col items-center gap-1">
-                                        <span class="w-2 h-2 rounded-full <%= events.include?('clicked') ? 'bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.5)]' : 'bg-slate-700' %>"></span>
-                                        <span class="text-[8px] font-bold text-slate-500 uppercase">Click</span>
+                                    <div class="flex items-center gap-1.5" title="Clicked">
+                                        <span class="w-2 h-2 rounded-full <%= events.include?('clicked') ? 'bg-brand-azure shadow-[0_0_8px] shadow-brand-azure/60' : 'bg-brand-navy/60' %>"></span>
+                                        <span class="text-[9px] font-black <%= events.include?('clicked') ? 'text-brand-azure' : 'text-brand-sky/20' %> uppercase">Click</span>
                                     </div>
                                 </div>
                             </td>

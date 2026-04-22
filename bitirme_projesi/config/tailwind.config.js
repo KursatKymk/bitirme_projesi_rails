@@ -1,4 +1,4 @@
-const defaultTheme = require('tailwindcss/defaultTheme')
+// const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
   content: [
@@ -9,8 +9,17 @@ module.exports = {
   ],
   theme: {
     extend: {
+      colors: {
+        brand: {
+          midnight: '#00033D',
+          navy: '#0600AB',
+          azure: '#0033FF',
+          sky: '#977DFF',
+          ice: '#F2E6EE'
+        }
+      },
       fontFamily: {
-        sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+//         sans: ['Inter var', ...defaultTheme.fontFamily.sans],
       },
     },
   },

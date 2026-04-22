@@ -3,8 +3,9 @@
 # ---------------------------------------------------------------------------
 
 puts "==> Clearing existing data"
-Credential.delete_all
 EmailEvent.delete_all
+Credential.delete_all
+CampaignTarget.delete_all
 Target.delete_all
 Campaign.delete_all
 

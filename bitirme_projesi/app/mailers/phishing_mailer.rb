@@ -4,6 +4,8 @@
 # gerçekten outbound mail gitmez.
 # ---------------------------------------------------------------------------
 class PhishingMailer < ApplicationMailer
+  helper :application
+
   def campaign_email
     @campaign = params[:campaign]
     @target   = params[:target]
