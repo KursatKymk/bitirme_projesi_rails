@@ -1,184 +1,355 @@
-<%= form_with model: [:admin, campaign], class: "space-y-6", local: true, multipart: true do |f| %>
+<%= form_with model: [:admin, campaign], local: true, id: "campaign-form", class: "space-y-6 pb-20" do |f| %>
   <% if campaign.errors.any? %>
-    <div class="px-4 py-3 rounded-md bg-rose-500/10 border border-rose-500/30 text-rose-300 text-sm">
-      <%= pluralize(campaign.errors.count, "error") %> found:
-      <ul class="list-disc pl-5 mt-2">
-        <% campaign.errors.full_messages.each do |m| %><li><%= m %></li><% end %>
+    <div class="p-6 rounded-[2rem] bg-brand-alert/5 border border-brand-alert/20 backdrop-blur-xl mb-10 shadow-2xl shadow-brand-alert/5">
+      <div class="flex items-center gap-3 text-brand-alert mb-4">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+        <div class="font-black uppercase tracking-widest text-[11px]"><%= pluralize(campaign.errors.count, "Configuration Conflict") %></div>
+      </div>
+      <ul class="space-y-1">
+        <% campaign.errors.full_messages.each do |message| %>
+          <li class="text-[11px] font-bold text-brand-midnight/60 leading-relaxed list-none border-l-2 border-brand-alert/40 pl-3 ml-1"><%= message %></li>
+        <% end %>
       </ul>
     </div>
   <% end %>
 
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-    <!-- Campaign Settings -->
-    <div class="rounded-xl bg-slate-900 border border-slate-800 p-6 space-y-6">
-      <div>
-        <h2 class="text-lg font-semibold mb-1">Core Campaign Settings</h2>
-        <p class="text-xs text-slate-500 mb-5">Primary configurations for your phishing simulation.</p>
-      </div>
-
-      <div class="space-y-4">
-        <div>
-          <%= f.label :name, "Campaign Name", class: "text-xs uppercase text-slate-400 font-bold" %>
-          <%= f.text_field :name, class: "mt-1 w-full bg-slate-800 border border-slate-700 rounded-md px-3 py-2 text-sm text-white focus:border-indigo-500 outline-none transition-all" %>
-        </div>
-        
-        <div>
-          <%= f.label :sender_email, "Sender Identity (Email)", class: "text-xs uppercase text-slate-400 font-bold" %>
-          <%= f.text_field :sender_email, class: "mt-1 w-full bg-slate-800 border border-slate-700 rounded-md px-3 py-2 text-sm text-white focus:border-indigo-500 outline-none transition-all" %>
-        </div>
-
-        <div>
-          <%= f.label :email_language, "Email Language", class: "text-xs uppercase text-slate-400 font-bold" %>
-          <%= f.select :email_language, 
-                [["English", "English"], ["Turkish", "Turkish"]], 
-                {}, class: "mt-1 w-full bg-slate-800 border border-slate-700 rounded-md px-3 py-2 text-sm text-white focus:border-indigo-500 outline-none transition-all" %>
-        </div>
-
-        <div>
-          <%= f.label :prompt_type, "Phishing Hook Strategy", class: "text-xs uppercase text-slate-400 font-bold" %>
-          <%= f.select :prompt_type,
-                [["Urgency (Action Required)", "urgency"], ["Authority (Admin Request)", "authority"], ["Curiosity (Internal News)", "curiosity"]],
-                {}, class: "mt-1 w-full bg-slate-800 border border-slate-700 rounded-md px-3 py-2 text-sm text-white focus:border-indigo-500 outline-none transition-all" %>
-        </div>
-      </div>
-
-      <div class="pt-4 border-t border-slate-800">
-        <h2 class="text-sm font-semibold mb-3">Target List & Reference Data</h2>
-        <div class="space-y-4">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    
+    <!-- LEFT SECTOR: MISSION CORE -->
+    <div class="lg:col-span-12 xl:col-span-7 space-y-8">
+      <div class="brand-card-solid p-6 relative overflow-hidden group">
+        <div class="flex items-center gap-3 mb-6 relative">
+          <div class="w-8 h-8 rounded-lg bg-brand-azure/5 text-brand-azure flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a3 3 0 01-3-3V6z" clip-rule="evenodd" />
+            </svg>
+          </div>
           <div>
-            <%= f.label :file, "Upload Target List (.xlsx)", class: "text-xs uppercase text-slate-400 font-bold" %>
-            <%= f.file_field :file, accept: ".xlsx", class: "block w-full text-xs text-slate-500 mt-1
-              file:mr-4 file:py-2 file:px-4
-              file:rounded-md file:border-0
-              file:text-xs file:font-semibold
-              file:bg-indigo-600 file:text-white
-              hover:file:bg-indigo-500 cursor-pointer" %>
+            <h2 class="text-lg font-black uppercase tracking-tight text-brand-midnight italic">Mission Parameters</h2>
+            <p class="text-[9px] text-brand-azure/40 font-bold uppercase tracking-widest mt-0.5">Campaign baseline and asset authorization.</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 z-10 relative">
+          <div>
+            <label class="block text-[9px] font-black text-brand-azure uppercase tracking-[0.2em] mb-2 px-1">Campaign Identity</label>
+            <%= f.text_field :name, placeholder: "OPERATION_SILENT_ICE", 
+                class: "w-full bg-white border border-brand-azure/10 rounded-xl px-4 py-3 text-xs text-brand-midnight focus:border-brand-azure outline-none transition-all placeholder:text-brand-midnight/10" %>
           </div>
           
-          <div class="flex gap-6 mt-2">
-            <div class="flex items-center gap-2">
-              <%= f.radio_button :import_mode, "replace", checked: true, class: "w-4 h-4 text-indigo-600 bg-slate-800 border-slate-700" %>
-              <%= f.label :import_mode_replace, "Replace Existing", class: "text-xs text-slate-300" %>
+          <div>
+            <label class="block text-[9px] font-black text-brand-azure uppercase tracking-[0.2em] mb-2 px-1">Sender Mask</label>
+            <%= f.email_field :sender_email, placeholder: "it.admin@university.edu", 
+                class: "w-full bg-white border border-brand-azure/10 rounded-xl px-4 py-3 text-xs text-brand-midnight focus:border-brand-azure outline-none transition-all placeholder:text-brand-midnight/10" %>
+          </div>
+
+          <div>
+            <label class="block text-[9px] font-black text-brand-azure uppercase tracking-[0.2em] mb-2 px-1">Cultural Context</label>
+            <%= f.select :email_language, [['ENGLISH (EN)', 'English'], ['TURKISH (TR)', 'Turkish']], 
+                {}, class: "w-full bg-white border border-brand-azure/10 rounded-xl px-4 py-3 text-xs text-brand-midnight focus:border-brand-azure outline-none transition-all appearance-none cursor-pointer" %>
+          </div>
+
+          <div>
+            <label class="block text-[9px] font-black text-brand-azure uppercase tracking-[0.2em] mb-2 px-1">Psych Trigger</label>
+            <%= f.select :prompt_type, [['URGENCY (TIME_SENSITIVE)', 'urgency'], ['AUTHORITY (OFFICE_LEVEL)', 'authority'], ['CURIOSITY (SOCIAL_STRAT)', 'curiosity']], 
+                {}, class: "w-full bg-white border border-brand-azure/10 rounded-xl px-4 py-3 text-xs text-brand-midnight focus:border-brand-azure outline-none transition-all appearance-none cursor-pointer" %>
+          </div>
+        </div>
+      </div>
+
+      <!-- GENETIC SCENARIO SECTOR -->
+      <div class="brand-card-solid p-6 relative overflow-hidden group">
+        <div class="flex items-center gap-3 mb-6 relative">
+          <div class="w-8 h-8 rounded-lg bg-brand-azure/5 text-brand-azure flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <div>
+            <h2 class="text-lg font-black uppercase tracking-tight text-brand-midnight italic">Narrative Control</h2>
+            <p class="text-[9px] text-brand-azure/40 font-bold uppercase tracking-widest mt-0.5">Autonomous content generation core.</p>
+          </div>
+        </div>
+        
+        <% is_manual = campaign.use_custom_scenario %>
+        <%= f.hidden_field :use_custom_scenario, id: "use_custom_scenario_field" %>
+
+        <div class="flex gap-1.5 p-1 bg-white rounded-xl border border-brand-azure/10 max-w-sm mb-4">
+          <button type="button" id="btn-autonomous" onclick="toggleScenario(false)" 
+                  class="flex-1 text-[9px] font-black transition-all <%= is_manual ? 'text-brand-midnight/20' : 'btn-secondary' %>">Autonomous</button>
+          <button type="button" id="btn-manual" onclick="toggleScenario(true)" 
+                  class="flex-1 text-[9px] font-black transition-all <%= is_manual ? 'btn-secondary' : 'text-brand-midnight/20' %>">Manual Override</button>
+        </div>
+
+        <div id="scenario-manual-section" class="space-y-4 transition-all duration-500 <%= is_manual ? 'opacity-100 scale-100' : 'opacity-0 scale-95 hidden' %>">
+          <%= f.text_area :scenario_prompt, rows: 3, placeholder: "Describe the specific social engineering premise...",
+              class: "w-full bg-white border border-brand-azure/20 rounded-xl px-4 py-3 text-xs text-brand-midnight focus:ring-1 focus:ring-brand-azure/50 outline-none transition-all placeholder:text-brand-midnight/10 italic" %>
+        </div>
+
+        <div id="autonomous-info-box" class="p-4 rounded-xl bg-brand-azure/5 border border-brand-azure/10 <%= is_manual ? 'hidden' : '' %>">
+            <p class="text-[10px] text-brand-midnight/60 leading-relaxed font-bold">
+              <span class="block text-brand-azure font-black uppercase tracking-widest mb-1">Auto Narrative Enabled</span>
+              AI will autonomously generate context-aware scenarios tailored to each target's department and tactical history.
+            </p>
+        </div>
+
+        <div class="mt-4 pt-4 border-t border-brand-azure/5">
+          <label class="block text-[9px] font-black text-brand-azure uppercase tracking-[0.2em] mb-2 px-1">Engagement Narrative</label>
+          <%= f.text_area :objective, placeholder: "e.g., Secure credential harvest via system maintenance alert", 
+              class: "w-full bg-white border border-brand-azure/10 rounded-xl px-4 py-3 text-xs text-brand-midnight focus:border-brand-azure outline-none transition-all min-h-[80px] placeholder:text-brand-midnight/10" %>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT SECTOR: ASSET VECTORING -->
+    <div class="lg:col-span-12 xl:col-span-5 space-y-8">
+      <div class="brand-card-solid p-5 relative overflow-hidden">
+        <div class="flex items-center justify-between mb-5 relative">
+          <div class="flex items-center gap-3">
+            <div class="w-7 h-7 rounded-lg bg-brand-azure/5 text-brand-azure flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clip-rule="evenodd" />
+              </svg>
             </div>
-            <div class="flex items-center gap-2">
-              <%= f.radio_button :import_mode, "append", class: "w-4 h-4 text-indigo-600 bg-slate-800 border-slate-700" %>
-              <%= f.label :import_mode_append, "Append New", class: "text-xs text-slate-300" %>
+            <div>
+              <h2 class="text-[11px] font-black uppercase tracking-[0.1em] text-brand-midnight italic">Asset Injection</h2>
             </div>
+          </div>
+          <p class="text-[7px] text-brand-azure/30 font-black uppercase tracking-widest hidden sm:block">Deployment Core</p>
+        </div>
+        
+        <!-- Hidden Operational Fields -->
+        <%= f.file_field :file, id: "import_file_field", class: "hidden", onchange: "this.form.submit()" %>
+        <%= f.radio_button :import_mode, "replace", id: "mode_replace", class: "hidden", checked: true %>
+        <%= f.radio_button :import_mode, "append", id: "mode_append", class: "hidden" %>
+        <div class="mt-4 p-2.5 bg-brand-midnight/[0.02] border border-dashed border-brand-azure/10 rounded-xl">
+          <div class="flex items-center justify-between mb-2 px-1">
+            <span class="text-[7px] font-black text-brand-azure uppercase tracking-widest opacity-40">Exemplary Record</span>
+          </div>
+          
+          <div class="space-y-1.5">
+            <!-- Headers -->
+            <div class="flex gap-1 pr-2">
+              <% ['full name', 'email', 'role', 'department'].each do |hdr| %>
+                <div class="flex-1 px-1.5 py-1 bg-white rounded border border-brand-azure/5 text-[6px] font-black text-brand-midnight/80 lowercase truncate text-center shadow-sm">
+                  <%= hdr %>
+                </div>
+              <% end %>
+            </div>
+            
+            <!-- Example Data -->
+            <div class="flex gap-1.5 opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300 pr-2">
+              <div class="flex-1 px-2 py-1 bg-brand-midnight/[0.03] border border-brand-azure/10 border-dashed rounded-lg text-[7px] font-bold text-brand-midnight italic truncate text-center">Jane Doe</div>
+              <div class="flex-1 px-2 py-1 bg-brand-midnight/[0.03] border border-brand-azure/10 border-dashed rounded-lg text-[7px] font-bold text-brand-azure italic truncate text-center">jane.doe@univ.edu</div>
+              <div class="flex-1 px-2 py-1 bg-brand-midnight/[0.03] border border-brand-azure/10 border-dashed rounded-lg text-[7px] font-bold text-brand-midnight italic truncate text-center">Associate Professor</div>
+              <div class="flex-1 px-2 py-1 bg-brand-midnight/[0.03] border border-brand-azure/10 border-dashed rounded-lg text-[7px] font-bold text-brand-midnight italic truncate text-center">Engineering</div>
+            </div>
+          </div>
+        </div>
+
+        <% if campaign.campaign_targets.any? %>
+          <div class="mt-4 space-y-2 mb-4">
+            <div class="flex items-center justify-between px-1">
+              <h4 class="text-[7px] font-black text-brand-azure uppercase tracking-[0.2em] opacity-40">Active Schema Mapping</h4>
+              <div class="h-px bg-brand-azure/10 flex-1 mx-3"></div>
+            </div>
+            
+            <div class="space-y-1 max-h-32 overflow-y-auto pr-2 custom-scrollbar">
+              <div class="flex gap-1 sticky top-0 bg-white z-10 pb-1">
+                <% campaign.target_headers.each do |header| %>
+                  <div class="flex-1 px-1.5 py-1 bg-white rounded border border-brand-azure/10 text-[6px] font-black text-brand-midnight lowercase truncate text-center" title="<%= header.gsub('_', ' ') %>"><%= header.gsub('_', ' ') %></div>
+                <% end %>
+              </div>
+              
+              <% campaign.campaign_targets.limit(5).each do |ct| %>
+                <div class="flex gap-1.5 hover:opacity-100 transition-opacity">
+                  <% data = (ct.custom_data || {}).stringify_keys %>
+                  <div class="flex-1 px-2 py-1 bg-white rounded-lg border border-brand-azure/5 text-[7px] font-bold text-brand-midnight italic truncate" title="<%= ct.target.full_name %>"><%= ct.target.full_name %></div>
+                  <div class="flex-1 px-2 py-1 bg-white rounded-lg border border-brand-azure/5 text-[7px] font-bold text-brand-azure truncate" title="<%= ct.target.email %>"><%= ct.target.email %></div>
+                  <div class="flex-1 px-2 py-1 bg-white rounded-lg border border-brand-azure/5 text-[7px] font-bold text-brand-midnight italic truncate" title="<%= data['role'] || data['rol'] %>"><%= data['role'] || data['rol'] %></div>
+                  <div class="flex-1 px-2 py-1 bg-white rounded-lg border border-brand-azure/5 text-[7px] font-bold text-brand-midnight italic truncate" title="<%= data['department'] || data['departman'] %>"><%= data['department'] || data['departman'] %></div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+
+        <!-- Manual Target Override (Quick-Add) -->
+        <div class="mt-4 pt-4 border-t border-brand-azure/5 space-y-2">
+          <div class="flex items-center justify-between px-1">
+            <h4 class="text-[7px] font-black text-brand-azure uppercase tracking-[0.2em] opacity-40">Manual Target Entry</h4>
+            <div class="h-px bg-brand-azure/10 flex-1 mx-3"></div>
+          </div>
+          
+          <div class="flex flex-wrap gap-2">
+            <input type="text" id="qa_full_name" placeholder="full name" class="flex-1 min-w-[120px] bg-white border border-brand-azure/10 rounded-lg px-2.5 py-2.5 text-xs text-brand-midnight focus:border-brand-azure outline-none transition-all placeholder:text-brand-midnight/20 placeholder:text-[9px]">
+            <input type="email" id="qa_email" placeholder="email" class="flex-1 min-w-[120px] bg-white border border-brand-azure/10 rounded-lg px-2.5 py-2.5 text-xs text-brand-midnight focus:border-brand-azure outline-none transition-all placeholder:text-brand-midnight/20 placeholder:text-[9px]">
+            <input type="text" id="qa_role" placeholder="role" class="flex-1 min-w-[120px] bg-white border border-brand-azure/10 rounded-lg px-2.5 py-2.5 text-xs text-brand-midnight focus:border-brand-azure outline-none transition-all placeholder:text-brand-midnight/20 placeholder:text-[9px]">
+            <input type="text" id="qa_department" placeholder="department" class="flex-1 min-w-[120px] bg-white border border-brand-azure/10 rounded-lg px-2.5 py-2.5 text-xs text-brand-midnight focus:border-brand-azure outline-none transition-all placeholder:text-brand-midnight/20 placeholder:text-[9px]">
+          </div>
+          
+          <button type="button" onclick="quickAddTarget(<%= @campaign.id %>)" class="w-full py-2 bg-brand-azure/5 hover:bg-brand-azure/10 border border-brand-azure/20 text-brand-azure rounded-lg text-[8px] font-black uppercase tracking-widest transition-all hover:scale-[1.01] active:scale-95">
+            + Append Manual Target
+          </button>
+        </div>
+
+        <!-- High-Density Horizontal Action Row -->
+        <div class="flex flex-row items-center gap-2 mt-4">
+          <button type="button" onclick="triggerImport('replace')" class="flex-1 btn-command group flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-lg relative overflow-hidden transition-all hover:scale-[1.02] active:scale-95 shadow-md shadow-brand-midnight/10">
+            <div class="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <svg class="w-3 h-3 text-white opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="12" height="12"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
+            <span class="text-[8px] font-black uppercase tracking-widest">Upload</span>
+          </button>
+          
+          <button type="button" onclick="triggerImport('append')" class="flex-1 bg-brand-azure/5 hover:bg-brand-azure/10 border border-brand-azure/10 text-brand-midnight flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-lg transition-all hover:scale-[1.02] active:scale-95">
+            <svg class="w-3 h-3 text-brand-azure opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="12" height="12"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <span class="text-[8px] font-black uppercase tracking-widest">Append</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MISSION PREVIEW MOCKUP -->
+      <div id="preview-section" class="brand-card-solid p-5 transition-all shadow-xl shadow-brand-midnight/5 relative overflow-hidden group <%= is_manual ? 'opacity-100' : 'opacity-0 scale-95 pointer-events-none' %>">
+        <div class="absolute top-0 right-0 p-4 opacity-5">
+          <svg class="w-16 h-16" fill="currentColor" class="text-brand-azure" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        </div>
+        <h3 class="text-lg font-black mb-6 text-brand-midnight uppercase tracking-tight italic">Intelligence Mockup (Synthetic)</h3>
+        <div class="space-y-4">
+          <div class="space-y-2">
+            <div class="flex items-center gap-3">
+              <span class="text-[8px] font-black text-brand-azure uppercase w-12 opacity-40">Origin</span>
+              <span class="text-[10px] font-bold text-brand-midnight/80" id="preview-from">Faculty Admin &lt;<%= campaign.sender_email %>&gt;</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-[8px] font-black text-brand-azure uppercase w-12 opacity-40">Subject</span>
+              <span class="text-[10px] font-black text-brand-alert tracking-tight italic" id="preview-subject">[Urgent] Infrastructure Case Update</span>
+            </div>
+          </div>
+          <div class="h-px bg-brand-azure/10"></div>
+          <div class="text-[10px] leading-relaxed text-brand-midnight/40 italic font-medium">
+            Personalized synthesis will begin immediately upon mission deployment...
           </div>
         </div>
       </div>
     </div>
-
-    <!-- AI Settings -->
-    <div class="space-y-6">
-      <div class="rounded-xl bg-slate-900 border border-slate-800 p-6">
-        <div class="flex items-center justify-between mb-5">
-            <h2 class="text-lg font-semibold">Scenario Personality</h2>
-            <div class="flex bg-slate-800 p-1 rounded-lg">
-                <button type="button" 
-                        id="btn-autonomous"
-                        onclick="toggleScenario(false)"
-                        class="text-[10px] font-bold px-3 py-1 rounded-md transition-all">AUTONOMOUS</button>
-                <button type="button" 
-                        id="btn-manual"
-                        onclick="toggleScenario(true)"
-                        class="text-[10px] font-bold px-3 py-1 rounded-md transition-all">MANUAL</button>
-            </div>
-        </div>
-        
-        <%= f.hidden_field :use_custom_scenario, id: "use_custom_scenario_field" %>
-
-        <div id="scenario-manual-section" class="space-y-4 transition-all opacity-0 hidden">
-            <div>
-                <%= f.label :scenario_prompt, "Define Specific Phishing Scenario", class: "text-xs uppercase text-slate-400 font-bold" %>
-                <%= f.text_area :scenario_prompt, rows: 4, placeholder: "e.g. A library fee warning or a system update notice...",
-                    class: "mt-1 w-full bg-slate-800 border border-slate-700 rounded-md px-3 py-2 text-sm text-white focus:border-indigo-500 outline-none transition-all" %>
-            </div>
-        </div>
-
-        <div id="autonomous-info-box" class="p-4 rounded-lg bg-emerald-500/5 border border-emerald-500/20">
-            <p class="text-[11px] text-emerald-400/80 leading-relaxed font-medium">
-                <span class="font-bold flex items-center gap-1 mb-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                    AUTONOMOUS AI MODE ACTIVE
-                </span>
-                The AI will creatively invent realistic university-themed topics (payroll, IT, library, etc.) for each target automatically. No scenario input required.
-            </p>
-        </div>
-      </div>
-
-      <div id="preview-section" class="rounded-xl bg-indigo-600/5 border border-indigo-500/20 p-6 transition-all opacity-0 hidden">
-        <h2 class="text-sm font-bold mb-4 text-indigo-300">Manual Preview Mockup</h2>
-        <div class="text-[10px] space-y-1 text-slate-400 mb-4 bg-slate-950/30 p-3 rounded-lg border border-slate-800">
-          <p><span class="text-slate-300 font-medium w-12 inline-block">From:</span> Faculty Admin &lt;<%= campaign.sender_email %>&gt;</p>
-          <p><span class="text-slate-300 font-medium w-12 inline-block">Subject:</span> [URGENCY] Action Required for Your Account</p>
-        </div>
-        <div class="text-xs leading-relaxed space-y-3 text-slate-400 italic">
-          <p>Your custom scenario will be used as a blueprint to generate highly personalized emails for each target...</p>
-        </div>
-      </div>
-    </div>
   </div>
 
-  <div class="flex justify-end gap-3 pt-4 border-t border-slate-800">
-    <%= link_to "Cancel", admin_campaigns_path, class: "text-xs font-bold px-6 py-2.5 rounded-xl border border-slate-700 text-slate-400 hover:text-white hover:bg-slate-800 transition-all uppercase tracking-widest" %>
-    <%= f.submit campaign.new_record? ? "Create Campaign" : "Update Campaign", class: "text-xs font-bold px-8 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white cursor-pointer transition-all shadow-lg shadow-indigo-600/20 uppercase tracking-widest" %>
-  </div>
 <% end %>
 
 <script>
-  function toggleScenario(manual) {
-    const manualSection = document.getElementById('scenario-manual-section');
-    const previewSection = document.getElementById('preview-section');
-    const infoBox = document.getElementById('autonomous-info-box');
+    function toggleScenario(isManual) {
+      const field = document.getElementById('use_custom_scenario_field');
+      const manualSection = document.getElementById('scenario-manual-section');
+      const infoBox = document.getElementById('autonomous-info-box');
+      const preview = document.getElementById('preview-section');
+      const btnAuto = document.getElementById('btn-autonomous');
+      const btnManual = document.getElementById('btn-manual');
+
+      if (!field || !manualSection || !infoBox || !preview || !btnAuto || !btnManual) return;
+
+      const active = ['btn-secondary'];
+      const inactive = ['text-brand-midnight/20'];
+
+      field.value = isManual;
+
+      if (isManual) {
+        manualSection.classList.remove('hidden', 'opacity-0', 'scale-95');
+        manualSection.classList.add('opacity-100', 'scale-100');
+        preview.classList.remove('hidden', 'opacity-0', 'scale-95', 'pointer-events-none');
+        preview.classList.add('opacity-100', 'scale-100');
+        infoBox.classList.add('hidden');
+        
+        btnManual.classList.add(...active);
+        btnManual.classList.remove(...inactive);
+        btnAuto.classList.remove(...active);
+        btnAuto.classList.add(...inactive);
+      } else {
+        manualSection.classList.add('hidden', 'opacity-0', 'scale-95');
+        manualSection.classList.remove('opacity-100', 'scale-100');
+        preview.classList.add('hidden', 'opacity-0', 'scale-95', 'pointer-events-none');
+        preview.classList.remove('opacity-100', 'scale-100');
+        infoBox.classList.remove('hidden');
+
+        btnAuto.classList.add(...active);
+        btnAuto.classList.remove(...inactive);
+        btnManual.classList.remove(...active);
+        btnManual.classList.add(...inactive);
+      }
+    }
+
+  function initScenario() {
     const field = document.getElementById('use_custom_scenario_field');
-    const btnAuto = document.getElementById('btn-autonomous');
-    const btnManual = document.getElementById('btn-manual');
-
-    if (!manualSection || !btnAuto) return;
-
-    field.value = manual;
-
-    if (manual) {
-      // Manual Mode: Show sections, hide info box
-      manualSection.style.display = 'block';
-      manualSection.classList.remove('opacity-0', 'hidden');
-      manualSection.classList.add('opacity-100');
-      
-      previewSection.style.display = 'block';
-      previewSection.classList.remove('opacity-0', 'hidden');
-      previewSection.classList.add('opacity-100');
-      
-      infoBox.style.display = 'none';
-      
-      btnManual.classList.add('bg-indigo-600', 'text-white');
-      btnManual.classList.remove('text-slate-500');
-      btnAuto.classList.remove('bg-indigo-600', 'text-white');
-      btnAuto.classList.add('text-slate-500');
-    } else {
-      // Autonomous Mode: Hide sections, show info box
-      manualSection.style.display = 'none';
-      previewSection.style.display = 'none';
-      
-      infoBox.style.display = 'block';
-      infoBox.classList.remove('hidden');
-      
-      btnAuto.classList.add('bg-indigo-600', 'text-white');
-      btnAuto.classList.remove('text-slate-500');
-      btnManual.classList.remove('bg-indigo-600', 'text-white');
-      btnManual.classList.add('text-slate-500');
+    if(field) {
+      toggleScenario(field.value === 'true');
     }
   }
 
-  // Use turbo:load for Rails 7+ compatibility
-  document.addEventListener('turbo:load', () => {
-    const isManual = <%= campaign.use_custom_scenario ? 'true' : 'false' %>;
-    toggleScenario(isManual);
-  });
-  
-  // Also run on normal load as fallback
-  document.addEventListener('DOMContentLoaded', () => {
-    const isManual = <%= campaign.use_custom_scenario ? 'true' : 'false' %>;
-    toggleScenario(isManual);
-  });
+  function triggerImport(mode) {
+    const fileInput = document.getElementById('import_file_field');
+    const modeRepl = document.getElementById('mode_replace');
+    const modeAppn = document.getElementById('mode_append');
+    
+    if (fileInput && modeRepl && modeAppn) {
+      if (mode === 'replace') modeRepl.checked = true;
+      if (mode === 'append') modeAppn.checked = true;
+      fileInput.click();
+    }
+  }
+
+  async function quickAddTarget(campaignId) {
+    const data = {
+      full_name: document.getElementById('qa_full_name').value,
+      email: document.getElementById('qa_email').value,
+      role: document.getElementById('qa_role').value,
+      department: document.getElementById('qa_department').value,
+      authenticity_token: document.querySelector('meta[name="csrf-token"]').content
+    };
+
+    if (!data.full_name || !data.email) {
+      alert("Mission incomplete: Name and Email required.");
+      return;
+    }
+
+    try {
+      const response = await fetch(`/admin/campaigns/${campaignId}/add_target`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': data.authenticity_token
+        },
+        body: JSON.stringify(data)
+      });
+      
+      if (response.ok) {
+        window.location.reload();
+      } else {
+        alert("Authorization failure: Contact Command.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Network disruption detected.");
+    }
+  }
+
+  document.addEventListener('turbo:load', initScenario);
+  document.addEventListener('DOMContentLoaded', initScenario);
 </script>
+
+<style>
+  /* Fix dropdown option contrast */
+  .modern-select option {
+    background-color: #f8fafc !important;
+    color: #00033D !important;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+  .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); border-radius: 10px; }
+  .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0, 51, 255, 0.1); border-radius: 10px; }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(0, 51, 255, 0.3); }
+
+  @keyframes pulse-subtle {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+  }
+  .animate-pulse-subtle { animation: pulse-subtle 3s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+</style>

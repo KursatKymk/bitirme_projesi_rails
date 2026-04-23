@@ -1,38 +1,39 @@
 <div class="flex items-center justify-between mb-6">
-  <h1 class="text-2xl font-bold tracking-tight text-white">CAMPAIGNS</h1>
-  <%= link_to "+ New Campaign", new_admin_campaign_path,
-        class: "text-sm bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 font-bold rounded-lg transition-all" %>
+  <h1 class="brand-header-primary">Active Operations</h1>
+  <%= link_to "+ NEW CAMPAIGN", new_admin_campaign_path, class: "btn-command text-xs" %>
 </div>
 
-<div class="rounded-xl bg-slate-900 border border-slate-800 overflow-hidden">
-  <table class="w-full text-sm">
-    <thead class="text-slate-400 text-xs uppercase">
+<div class="brand-card-solid overflow-hidden">
+  <table class="w-full text-sm text-left">
+    <thead class="bg-brand-azure/5 text-brand-midnight/40 text-[10px] uppercase font-black tracking-[0.22em]">
       <tr>
-        <th class="px-5 py-3 text-left">Name</th>
-        <th class="px-5 py-3 text-left">Language</th>
-        <th class="px-5 py-3 text-left">Strategy</th>
-        <th class="px-5 py-3 text-left">Status</th>
-        <th class="px-5 py-3 text-right">Sent</th>
-        <th class="px-5 py-3 text-right">Captured</th>
-        <th class="px-5 py-3"></th>
+        <th class="px-8 py-5">Operation Name</th>
+        <th class="px-8 py-5">Language</th>
+        <th class="px-8 py-5">Strategy</th>
+        <th class="px-8 py-5">State</th>
+        <th class="px-8 py-5 text-right">Sent</th>
+        <th class="px-8 py-5 text-right">Breach</th>
+        <th class="px-8 py-5"></th>
       </tr>
     </thead>
-    <tbody>
+    <tbody class="divide-y divide-brand-azure/10">
       <% @campaigns.each do |c| %>
-        <tr class="border-t border-slate-800 hover:bg-slate-800/50">
-          <td class="px-5 py-3"><%= link_to c.name, admin_campaign_path(c), class: "text-indigo-400 hover:underline" %></td>
-          <td class="px-5 py-3 text-slate-400 font-medium"><%= c.email_language %></td>
-          <td class="px-5 py-3 text-slate-400"><%= c.prompt_type.capitalize %></td>
-          <td class="px-5 py-3">
-            <span class="text-xs px-2 py-0.5 rounded-full
-              <%= c.status == 'sent' ? 'bg-emerald-500/15 text-emerald-300' : 'bg-slate-700 text-slate-300' %>">
+        <tr class="hover:bg-brand-azure/5 transition-colors group">
+          <td class="px-8 py-5">
+            <%= link_to c.name, admin_campaign_path(c), class: "font-bold text-brand-midnight hover:text-brand-azure transition-colors" %>
+          </td>
+          <td class="px-8 py-5 text-brand-midnight/50 font-medium italic"><%= c.email_language %></td>
+          <td class="px-8 py-5 text-brand-azure/80 font-black uppercase tracking-widest text-[10px]"><%= c.prompt_type.capitalize %></td>
+          <td class="px-8 py-5">
+            <span class="text-[9px] px-3 py-1.5 rounded-lg font-black uppercase tracking-wider border
+              <%= c.status == 'sent' ? 'bg-brand-azure/10 text-brand-azure border-brand-azure/30 shadow-lg shadow-brand-azure/5' : 'bg-brand-ice/40 text-brand-midnight/40 border-brand-azure/10' %>">
               <%= c.status %>
             </span>
           </td>
-          <td class="px-5 py-3 text-right"><%= c.emails_sent %></td>
-          <td class="px-5 py-3 text-right text-rose-400"><%= c.creds_captured %></td>
-          <td class="px-5 py-3 text-right">
-            <%= link_to "Edit", edit_admin_campaign_path(c), class: "text-xs text-slate-400 hover:text-white" %>
+          <td class="px-8 py-5 text-right text-brand-midnight/60 font-mono"><%= c.emails_sent %></td>
+          <td class="px-8 py-5 text-right text-brand-midnight font-black"><%= c.creds_captured %></td>
+          <td class="px-8 py-5 text-right">
+            <%= link_to "EDIT", edit_admin_campaign_path(c), class: "btn-secondary text-[10px]" %>
           </td>
         </tr>
       <% end %>

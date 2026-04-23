@@ -11,32 +11,49 @@ class ExcelImportService
     sheet = xlsx.sheet(0)
     
     # Assuming first row is header
-    header = sheet.row(1).map(&:to_s).map(&:downcase)
+    raw_header = sheet.row(1).map(&:to_s).map(&:downcase)
+    
+    # Normalize headers to match user specifications
+    header_map = {}
+    raw_header.each_with_index do |h, idx|
+      # Remove any invisible characters or surrounding whitespace
+      clean_h = h.strip.downcase
+      
+      case clean_h
+      when 'email', /e-posta|mail/
+        header_map['email'] = idx
+      when 'full name', /full-name|full_name|ad soyad|isim|name/
+        header_map['full_name'] = idx
+      when 'role', /rol|gorev|gorevi|pozisyon/
+        header_map['role'] = idx
+      when 'department', /departman|birim|fakulte|bolum/
+        header_map['department'] = idx
+      end
+    end
     
     (2..sheet.last_row).each do |i|
-      row = Hash[header.zip(sheet.row(i))]
+      row_data = sheet.row(i)
       
-      email = row['email']
-      full_name = row['ad-soyad']
+      email = row_data[header_map['email']]
+      full_name = row_data[header_map['full_name']]
+      role = row_data[header_map['role']]
+      department = row_data[header_map['department']]
       
       next if email.blank?
 
-      target = Target.find_or_create_by!(email: email) do |t|
+      target = Target.find_or_create_by!(email: email.to_s.strip.downcase) do |t|
         t.full_name = full_name
         t.group_name = @campaign.target_group if Target::GROUPS.include?(@campaign.target_group)
       end
 
-      # Update name if it changed
-      target.update!(full_name: full_name) if target.full_name != full_name
+      # Update name if it changed or was nil
+      target.update!(full_name: full_name) if full_name.present? && target.full_name != full_name
 
-      # Link to campaign and store metadata
+      # Link to campaign and store metadata (normalized)
       campaign_target = CampaignTarget.find_or_initialize_by(campaign: @campaign, target: target)
       campaign_target.custom_data = {
-        'rol' => row['rol'],
-        'departman' => row['departman'],
-        'arastirma_alanlari' => row['arastirma alanlari'],
-        'yayinlar' => row['yayinlar(varsa)'],
-        'projeler' => row['projeler(varsa)']
+        'role' => role,
+        'department' => department
       }
       campaign_target.save!
     end

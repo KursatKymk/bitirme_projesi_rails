@@ -2,10 +2,15 @@
 <html lang="tr">
   <head>
     <title>PhishSim</title>
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <title>PhishSim</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
+    <%= stylesheet_link_tag "brand_identity", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
-  <body><%= yield %></body>
+  <body class="brand-bg-ice text-brand-midnight"><%= yield %></body>
 </html>

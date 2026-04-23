@@ -1,71 +1,215 @@
-<div class="flex items-center justify-between mb-6">
-  <h1 class="text-2xl font-bold tracking-tight">ADMIN DASHBOARD</h1>
-  <span class="text-xs text-slate-500"><%= Date.current.strftime("%d %B %Y").upcase %></span>
+<div class="flex items-center justify-between mb-8">
+  <div class="flex flex-col">
+    <h1 class="brand-header-primary">
+      Command Center
+    </h1>
+    <p class="text-[10px] text-brand-midnight/60 font-bold uppercase tracking-widest mt-1">Real-time simulation monitoring and threat intelligence.</p>
+  </div>
 </div>
 
-<!-- KPI cards -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+<!-- TOP KPIs -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
   <%= render "kpi", title: "Total Emails Sent", value: number_with_delimiter(@total_emails_sent), change: "+12%", positive: true %>
   <%= render "kpi", title: "Click-Through Rate", value: "#{@ctr}%", change: "-3.1%", positive: false %>
+  <%= render "kpi", title: "Data Breach Rate", value: "#{@breach_rate}%", alert: true %>
+  <%= render "kpi", title: "Credential Submission", value: "#{@credential_submission_rate}%", highlighted: true %>
+</div>
 
-  <div class="rounded-xl bg-slate-900 border border-slate-800 p-5">
-    <p class="text-xs uppercase tracking-wider text-slate-500">Campaign Engagement</p>
-    <div class="mt-4 space-y-3">
-      <% @engagement.each do |row| %>
-        <div>
-          <div class="flex justify-between text-xs text-slate-400 mb-1">
-            <span><%= row[:name] %></span>
-            <span><%= row[:clicked] %> clicks</span>
-          </div>
-          <div class="h-2 rounded bg-slate-800 overflow-hidden">
-            <% pct = row[:opened].zero? ? 0 : (row[:clicked].to_f / row[:opened] * 100).clamp(0, 100) %>
-            <div class="h-full bg-indigo-500" style="width: <%= pct.round %>%"></div>
-          </div>
-        </div>
+<!-- CHARTS SECTION -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+  <!-- Line Chart: 7-Day Click Trend -->
+  <div class="md:col-span-2 lg:col-span-3 rounded-[2rem] bg-white border border-brand-azure/10 overflow-hidden shadow-2xl shadow-brand-midnight/5 p-8 backdrop-blur-xl relative group">
+    <div class="absolute inset-0 bg-gradient-to-br from-brand-azure/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+    <h2 class="text-[10px] font-black uppercase tracking-[0.3em] text-brand-midnight opacity-30 mb-8 relative">7-Day Vulnerability Trend (Clicks)</h2>
+    <div class="relative h-64 w-full">
+      <canvas id="trendChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Doughnut Chart: Department Risk -->
+  <div class="md:col-span-1 lg:col-span-1 rounded-[2rem] bg-white border border-brand-azure/10 overflow-hidden shadow-2xl shadow-brand-midnight/5 p-8 backdrop-blur-xl relative group">
+    <div class="absolute inset-0 bg-gradient-to-br from-brand-azure/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+    <h2 class="text-[10px] font-black uppercase tracking-[0.3em] text-brand-midnight opacity-30 mb-8 relative">Department Risk</h2>
+    <div class="relative h-64 w-full flex items-center justify-center">
+      <% if @vuln_by_dept.empty? %>
+        <p class="text-brand-azure/20 text-xs italic font-bold uppercase tracking-widest">Insufficient data</p>
+      <% else %>
+        <canvas id="deptChart"></canvas>
       <% end %>
     </div>
   </div>
 </div>
 
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-  <%= render "kpi", title: "Data Breach Rate",             value: "#{@breach_rate}%", alert: true %>
-  <%= render "kpi", title: "Credential Submission Rate",   value: "#{@credential_submission_rate}%", highlighted: true %>
+<!-- BOTTOM SECTION: Campaigns & Activity Feed -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+  <!-- Campaign Table (Left 3/4) -->
+  <div class="md:col-span-2 lg:col-span-3 brand-card-solid overflow-hidden flex flex-col h-[520px]">
+    <div class="px-8 py-6 border-b border-brand-azure/5 bg-brand-azure/[0.02] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <h2 class="text-lg font-black uppercase tracking-tight text-brand-midnight italic">Deployed Operations</h2>
+      <%= link_to new_admin_campaign_path, class: "btn-command text-[9px]" do %>
+        + NEW CAMPAIGN
+      <% end %>
+    </div>
+    
+    <div class="flex-1 overflow-auto">
+      <table class="w-full text-sm text-left">
+        <thead class="bg-brand-azure/5 text-brand-azure/60 text-[10px] uppercase font-black tracking-[0.2em]">
+          <tr>
+            <th class="px-6 py-4">Operation Name</th>
+            <th class="px-6 py-4">Status</th>
+            <th class="px-6 py-4 text-right">Sent</th>
+            <th class="px-6 py-4 text-right">CTR</th>
+            <th class="px-6 py-4 text-right">Breach</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-brand-azure/10">
+          <% if @campaigns.any? %>
+            <% @campaigns.each do |c| %>
+              <tr class="hover:bg-brand-azure/5 transition-colors">
+                <td class="px-6 py-4">
+                  <%= link_to c.name, edit_admin_campaign_path(c), class: "font-medium text-brand-midnight hover:text-brand-azure transition-colors" %>
+                  <div class="text-[10px] text-brand-azure/50 font-bold tracking-widest mt-1 uppercase"><%= c.target_group %></div>
+                </td>
+                <td class="px-6 py-4">
+                  <% if c.status == 'sent' %>
+                    <span class="inline-flex items-center gap-1.5 py-1 px-3 rounded-full bg-brand-ice/40 text-brand-azure text-[10px] font-black uppercase tracking-widest border border-brand-azure/20 shadow-sm shadow-brand-azure/5">Deployed</span>
+                  <% elsif c.status == 'scheduled' %>
+                    <span class="inline-flex items-center gap-1.5 py-1 px-3 rounded-full bg-brand-ice/20 text-brand-azure/40 text-[10px] font-black uppercase tracking-widest border border-brand-azure/10">Scheduled</span>
+                  <% else %>
+                    <span class="inline-flex items-center gap-1.5 py-1 px-3 rounded-full bg-brand-ice/10 text-brand-midnight/20 text-[10px] font-black uppercase tracking-widest border border-brand-azure/10">Draft</span>
+                  <% end %>
+                </td>
+                <td class="px-6 py-4 text-right font-medium text-brand-midnight/60"><%= number_with_delimiter(c.emails_sent) %></td>
+                <td class="px-6 py-4 text-right font-medium text-brand-midnight/60"><%= c.click_through_rate %>%</td>
+                <td class="px-8 py-4 text-right text-brand-midnight font-black"><%= c.creds_captured %></td>
+              </tr>
+            <% end %>
+          <% else %>
+            <tr><td colspan="5" class="px-6 py-12 text-center text-xs text-brand-sky/40 italic">No operational data found.</td></tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Real-Time Feed (Right 1/4) -->
+  <div class="md:col-span-1 lg:col-span-1 rounded-[2rem] bg-white border border-brand-azure/10 overflow-hidden shadow-2xl shadow-brand-midnight/5 flex flex-col h-[520px] backdrop-blur-lg">
+    <div class="px-8 py-6 border-b border-brand-azure/5 bg-brand-azure/[0.02] flex items-center gap-3">
+      <div class="w-2.5 h-2.5 rounded-full bg-brand-azure shadow-[0_0_15px] shadow-brand-azure/40 animate-pulse"></div>
+      <h2 class="text-[10px] font-black uppercase tracking-[0.3em] text-brand-midnight opacity-30">Live Telemetry Feed</h2>
+    </div>
+    
+    <div class="flex-1 overflow-y-auto p-4 space-y-3 font-mono text-[10px]">
+      <% if @recent_activity.any? %>
+        <% @recent_activity.each do |event| %>
+          <div class="flex flex-col p-3 rounded-lg bg-brand-ice/20 border border-brand-azure/5 hover:border-brand-azure/20 transition-colors">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-brand-midnight/40"><%= time_ago_in_words(event.created_at) %> ago</span>
+              <% case event.event_type %>
+              <% when 'sent' %>
+                <span class="text-brand-azure font-bold">[DISP]</span>
+              <% when 'opened' %>
+                <span class="text-brand-midnight font-bold">[OPEN]</span>
+              <% when 'clicked' %>
+                <span class="text-brand-azure font-bold text-shadow-sm">[CLICK]</span>
+              <% when 'submitted' %>
+                <span class="text-brand-alert font-black animate-pulse shadow-brand-alert/50 scale-110">[BREACH]</span>
+              <% when 'blocked_by_spam_filter' %>
+                <span class="text-brand-midnight/20 font-bold">[BLCK]</span>
+              <% end %>
+            </div>
+            <div class="text-brand-midnight/70 truncate"><%= event.target.email %></div>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="text-center py-10 text-brand-midnight/20 italic font-sans">No recent telemetry.</div>
+      <% end %>
+    </div>
+  </div>
 </div>
 
-<!-- Campaign table -->
-<div class="rounded-xl bg-slate-900 border border-slate-800 overflow-hidden">
-  <div class="px-5 py-4 border-b border-slate-800 flex items-center justify-between">
-    <h2 class="text-sm font-semibold">Son Kampanyalar</h2>
-    <%= link_to "Yeni Kampanya", new_admin_campaign_path,
-          class: "text-xs bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-md" %>
-  </div>
-  <table class="w-full text-sm">
-    <thead class="bg-slate-900 text-slate-400 text-xs uppercase">
-      <tr>
-        <th class="px-5 py-3 text-left">Name</th>
-        <th class="px-5 py-3 text-left">Target</th>
-        <th class="px-5 py-3 text-left">Status</th>
-        <th class="px-5 py-3 text-right">Sent</th>
-        <th class="px-5 py-3 text-right">CTR</th>
-        <th class="px-5 py-3 text-right">Captured</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @campaigns.each do |c| %>
-        <tr class="border-t border-slate-800 hover:bg-slate-800/50">
-          <td class="px-5 py-3"><%= link_to c.name, admin_campaign_path(c), class: "text-indigo-400 hover:underline" %></td>
-          <td class="px-5 py-3 text-slate-400"><%= c.target_group %></td>
-          <td class="px-5 py-3">
-            <span class="text-xs px-2 py-0.5 rounded-full
-              <%= c.status == 'sent' ? 'bg-emerald-500/15 text-emerald-300' : 'bg-slate-700 text-slate-300' %>">
-              <%= c.status %>
-            </span>
-          </td>
-          <td class="px-5 py-3 text-right"><%= c.emails_sent %></td>
-          <td class="px-5 py-3 text-right"><%= c.click_through_rate %>%</td>
-          <td class="px-5 py-3 text-right text-rose-400"><%= c.creds_captured %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-</div>
+<!-- Chart.js Injection & Initialization -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  function initCharts() {
+    <% cp = brand_palette %>
+    const pal = <%= raw cp.to_json %>;
+
+    // 1. Trend Chart (Line)
+    const trendCtx = document.getElementById('trendChart');
+    if(trendCtx && !trendCtx.dataset.initialized) {
+      trendCtx.dataset.initialized = 'true';
+      const labels = <%= raw @clicks_by_day.map { |d| d[:x] }.to_json %>;
+      const data = <%= raw @clicks_by_day.map { |d| d[:y] }.to_json %>;
+      
+      new Chart(trendCtx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Link Clicks',
+            data: data,
+            borderColor: pal.azure,
+            backgroundColor: 'rgba(84, 131, 179, 0.1)', // Keeping slight alpha for fill
+            borderWidth: 4,
+            tension: 0.5,
+            fill: true,
+            pointBackgroundColor: pal.ice,
+            pointBorderColor: pal.midnight,
+            pointBorderWidth: 2,
+            pointRadius: 6,
+            pointHoverRadius: 8
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { beginAtZero: true, grid: { color: 'rgba(0, 3, 61, 0.05)' }, ticks: { color: pal.midnight } },
+            x: { grid: { display: false }, ticks: { color: pal.midnight } }
+          }
+        }
+      });
+    }
+
+    // 2. Department Chart (Doughnut)
+    const deptCtx = document.getElementById('deptChart');
+    if(deptCtx && !deptCtx.dataset.initialized) {
+      deptCtx.dataset.initialized = 'true';
+      const deptLabels = <%= raw @vuln_by_dept.keys.to_json %>;
+      const deptData = <%= raw @vuln_by_dept.values.to_json %>;
+      
+      new Chart(deptCtx, {
+        type: 'doughnut',
+        data: {
+          labels: deptLabels,
+          datasets: [{
+            data: deptData,
+            backgroundColor: [
+              pal.azure, pal.sky, pal.ice, pal.navy, pal.midnight
+            ],
+            borderWidth: 0,
+            hoverOffset: 15
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '75%',
+          plugins: {
+            legend: { position: 'right', labels: { color: pal.midnight, font: { size: 10, weight: 'bold' } } }
+          }
+        }
+      });
+    }
+  }
+
+  // Trigger on both turbo and regular load
+  document.addEventListener("turbo:load", initCharts);
+  document.addEventListener("DOMContentLoaded", initCharts);
+  // Fallback if script loads late
+  if (document.readyState === "complete" || document.readyState === "interactive") {
+    setTimeout(initCharts, 100);
+  }
+</script>

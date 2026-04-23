@@ -1,1 +1,27 @@
 @import "tailwindcss";
+
+@source "../../views";
+@source "../../helpers";
+@source "../../javascript";
+
+@theme {
+  --color-brand-blue: #0033FF;
+  --color-brand-navy: #0600AB;
+  --color-brand-midnight: #00033D;
+  --color-brand-azure: #0033FF;
+  --color-brand-sapphire: #0600AB;
+  --color-brand-persian: #0033FF;
+  --color-brand-argentina: #977DFF;
+  --color-brand-cerulean: #0033FF;
+  --color-brand-aqua: #F2E6EE;
+  --color-brand-sky: #977DFF;
+  --color-brand-electric: #F2E6EE;
+  --color-brand-celeste: #F2E6EE;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-brand-midnight);
+    color: var(--color-brand-ice);
+  }
+}

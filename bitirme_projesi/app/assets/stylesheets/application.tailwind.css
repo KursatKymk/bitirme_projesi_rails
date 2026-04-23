@@ -1,3 +1,29 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@source "../../views";
+@source "../../helpers";
+@source "../../javascript";
+@config "../../../config/tailwind.config.js";
+
+@theme {
+  /* ATTITUDE 5-COLOR PALETTE */
+  --color-brand-midnight: #00033D;
+  --color-brand-navy: #0600AB;
+  --color-brand-azure: #0033FF;
+  --color-brand-sky: #977DFF;
+  --color-brand-ice: #F2E6EE;
+
+  /* Aliases mapped to the 5 colors */
+  --color-brand-blue: #0033FF;
+  --color-brand-electric: #977DFF;
+  --color-brand-celeste: #F2E6EE;
+  --color-brand-aqua: #F2E6EE;
+  --color-brand-argentina: #977DFF;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-brand-ice);
+    color: var(--color-brand-midnight);
+  }
+}

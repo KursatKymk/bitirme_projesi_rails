@@ -1,0 +1,85 @@
+<div id="ai_generation_modal_content" class="text-center relative">
+  <div class="mb-8">
+    <div class="inline-flex items-center justify-center rounded-2xl bg-brand-azure/10 text-brand-ice mb-6 animate-pulse shadow-lg shadow-brand-azure/10 border border-brand-azure/20" style="width: 64px; height: 64px;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+      </svg>
+    </div>
+    <h3 class="text-xl font-black text-brand-ice uppercase tracking-tight italic">AI Synthesis in Progress</h3>
+    <p class="text-[10px] text-brand-sky font-bold uppercase tracking-widest mt-2 opacity-60 italic">Synthesizing personalized intelligence scenarios...</p>
+  </div>
+
+  <div class="relative pt-1">
+    <div class="flex mb-4 items-center justify-between">
+      <div>
+        <span id="ai_modal_pct" class="text-[9px] font-black inline-block py-1.5 px-3 uppercase rounded-lg text-brand-ice bg-brand-azure/20 tracking-widest border border-brand-azure/30">
+          <%= percentage %>% Complete
+        </span>
+      </div>
+      <div class="text-right">
+        <span id="ai_modal_counter" class="text-[9px] font-black inline-block text-brand-sky uppercase tracking-widest opacity-60">
+          <%= campaign.ai_processed_count %> / <%= campaign.ai_total_count %> Targets
+        </span>
+      </div>
+    </div>
+    <div class="overflow-hidden h-3 mb-6 flex rounded-full bg-brand-midnight border border-brand-azure/10 shadow-inner p-0.5">
+      <div id="ai_modal_bar" style="width: <%= percentage %>%" class="shadow-none flex flex-col text-center whitespace-nowrap text-brand-midnight justify-center bg-gradient-to-r from-brand-azure via-brand-azure to-brand-ice transition-all duration-700 shadow-[0_0_20px] shadow-brand-ice/30 rounded-full"></div>
+    </div>
+  </div>
+
+
+  <% if campaign.ai_status == 'completed' %>
+    <script>
+      setTimeout(function() {
+        window.location.reload();
+      }, 1500);
+    </script>
+    <div class="mt-6 text-brand-ice text-xs font-bold animate-bounce uppercase tracking-widest flex items-center justify-center gap-2 drop-shadow-[0_0_10px] shadow-brand-ice/50">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+      </svg>
+      Generation Complete! Refreshing...
+    </div>
+  <% elsif campaign.ai_status == 'processing' %>
+    <script>
+      // SADECE canlı yayında modalı görünür yap (Sayfa yüklenirken yapma)
+      var modal = document.getElementById('ai_generation_modal');
+      if (modal && modal.style.display === 'none') {
+        modal.style.display = 'flex';
+      }
+
+      // Decentralized Auto-Polling Fallback
+      if (!window.aiPollingActive) {
+        window.aiPollingActive = true;
+        var pollInterval = setInterval(function() {
+          fetch('/admin/campaigns/<%= campaign.id %>/ai_status')
+            .then(res => res.json())
+            .then(data => {
+              if (data.status === 'completed' || data.status === 'idle') {
+                clearInterval(pollInterval);
+                window.aiPollingActive = false;
+                window.location.reload();
+              } else if (data.status === 'processing') {
+                var total = data.total <= 0 ? 1 : data.total;
+                var rawPct = (data.processed / total) * 100;
+                var pct = Math.max(0, Math.min(100, Math.round(rawPct)));
+                
+                // Update DOM dynamically
+                var progressText = document.getElementById('ai_modal_pct');
+                if(progressText) progressText.innerText = pct + '% Complete';
+                
+                var bar = document.getElementById('ai_modal_bar');
+                if(bar) {
+                  bar.setAttribute('style', 'width: ' + pct + '% !important');
+                }
+                
+                var counterText = document.getElementById('ai_modal_counter');
+                if(counterText) counterText.innerText = data.processed + ' / ' + data.total + ' Targets';
+              }
+            })
+            .catch(err => console.error("Synthesis poll err:", err));
+        }, 1200);
+      }
+    </script>
+  <% end %>
+</div>

@@ -5,3 +5,39 @@ tr:
     campaigns: "Kampanyalar"
     analytics: "Analitik"
     credentials: "Yakalanan Bilgiler"
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: "yaklaşık 1 saat önce"
+        other: "yaklaşık %{count} saat önce"
+      about_x_months:
+        one: "yaklaşık 1 ay önce"
+        other: "yaklaşık %{count} ay önce"
+      about_x_years:
+        one: "yaklaşık 1 yıl önce"
+        other: "yaklaşık %{count} yıl önce"
+      almost_x_years:
+        one: "neredeyse 1 yıl önce"
+        other: "neredeyse %{count} yıl önce"
+      half_a_minute: "yarım dakika önce"
+      less_than_x_minutes:
+        one: "1 dakikadan az önce"
+        other: "%{count} dakikadan az önce"
+      less_than_x_seconds:
+        one: "1 saniyeden az önce"
+        other: "%{count} saniyeden az önce"
+      over_x_years:
+        one: "1 yıldan fazla önce"
+        other: "%{count} yıldan fazla önce"
+      x_days:
+        one: "1 gün önce"
+        other: "%{count} gün önce"
+      x_minutes:
+        one: "1 dakika önce"
+        other: "%{count} dakika önce"
+      x_months:
+        one: "1 ay önce"
+        other: "%{count} ay önce"
+      x_seconds:
+        one: "1 saniye önce"
+        other: "%{count} saniye önce"

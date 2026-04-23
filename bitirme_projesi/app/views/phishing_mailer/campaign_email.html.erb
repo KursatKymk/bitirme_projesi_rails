@@ -1,18 +1,19 @@
-<div style="font-family: Arial, sans-serif; color: #1b1b1b; max-width: 560px;">
+<% cp = brand_palette %>
+<div style="font-family: Arial, sans-serif; color: <%= cp[:midnight] %>; max-width: 560px;">
   <% if @body.present? %>
     <%= @body.gsub("\n", "<br>").html_safe %>
   <% else %>
-    <h3>Microsoft Hesabınızla İlgili Önemli Bildirim</h3>
+    <h3 style="color: <%= cp[:midnight] %>;">Microsoft Hesabınızla İlgili Önemli Bildirim</h3>
     <p>Merhaba <%= @target.full_name.presence || "Öğrenci" %>,</p>
     <p>Hesabınızda şüpheli bir giriş denemesi fark edildi.</p>
     <p>Lütfen güvenliğiniz için aşağıdaki bağlantıya tıklayarak giriş yapın ve bilgilerinizi doğrulayın:</p>
     <p>
       <a href="<%= @link %>"
-         style="background:#0067b8;color:#fff;padding:10px 18px;text-decoration:none;border-radius:3px;">
+         style="background:<%= cp[:azure] %>;color:<%= cp[:ice] %>;padding:10px 18px;text-decoration:none;border-radius:3px;font-weight:bold;">
         Giriş Yap ve Doğrula
       </a>
     </p>
-    <p style="color:#666;font-size:12px;margin-top:24px;">
+    <p style="color:<%= cp[:sky] %>;font-size:12px;margin-top:24px;">
       Saygılarımızla,<br>
       Kadir Has Üniversitesi Bilgi İşlem / Microsoft Güvenlik Ekibi
     </p>
